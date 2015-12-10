@@ -27,6 +27,7 @@
     - logstash
     - nginx
     - consul
+    - etcd
     - dnsmasq
 
 # ROLES - after provisioning the software that's common to all hosts, we do
@@ -66,6 +67,18 @@
     - mesos
     - marathon
     - mantlui
+    - k8s-master
+    - k8s-addons
+
+- hosts: role=kubeworker
+  # role=worker hosts are a subset of "all". Since we already gathered facts on
+  # all servers, we can skip it here to speed up the deployment.
+  gather_facts: no
+  vars:
+    consul_dns_domain: consul
+  roles:
+    - k8s-minion
+    - flannel
 
 # The edge role exists solely for routing traffic into the cluster. Firewall
 # settings should be such that web traffic (ports 80 and 443) is exposed to the
