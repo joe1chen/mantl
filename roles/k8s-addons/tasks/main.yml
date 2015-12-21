@@ -1,3 +1,0 @@
----
-- include: tasks.yml
-  when: "groups['role=kubeworker'] is defined"
