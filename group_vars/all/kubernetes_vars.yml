@@ -6,12 +6,12 @@ etcd_group_name: role=control
 master_group_name: role=control
 minion_group_name: role=kubeworker
 
-etcd_url_scheme: http
-
+# Which type of packages should be used for deployment: stable, testing
+package_channel: stable
 
 # Kubernetes build to use, stable is used by default.
 # Place "testing" here to use latest build avialable.
-kube_build: stable
+kube_version: v1.1.2
 
 # Users to create for basic auth in Kubernetes API via HTTP
 kube_users:
@@ -21,7 +21,6 @@ kube_users:
   root:
     pass: changeme
     role: admin
-
 
 # Select which network manager to use. After choosing, edit kubernetes.yml file and include aproriate roles.
 # network: calico
@@ -74,3 +73,17 @@ enable_logging: true
 
 # Set to "false' to disable default Monitoring (cAdvisor + heapster + influxdb + grafana)
 enable_monitoring: true
+
+# etcd specific variables
+# TCP port used for client communications
+etcd_client_port: 2379
+
+# TCP port used for intra-cluster communications
+etcd_peer_port: 2380
+
+# Client communication protocol (http/https)
+etcd_url_scheme: http
+
+# Intra-cluster communication protocol (http/https)
+etcd_peer_url_scheme: http
+
