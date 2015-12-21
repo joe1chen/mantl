@@ -111,9 +111,6 @@ class KubeManager(object):
         if module.params.get('namespace'):
             self.base_cmd.append('--namespace=' + module.params.get('namespace'))
 
-        if module.params.get('config'):
-            self.base_cmd.append('--kubeconfig=' + module.params.get('config'))
-
         self.all = module.params.get('all')
         self.force = module.params.get('force')
         self.name = module.params.get('name')
@@ -265,7 +262,6 @@ def main():
             resource=dict(),
             label=dict(),
             server=dict(),
-            config=dict(),
             api_version=dict(default='v1', choices=['v1', 'v1beta3']),
             force=dict(default=False, type='bool'),
             all=dict(default=False, type='bool'),
