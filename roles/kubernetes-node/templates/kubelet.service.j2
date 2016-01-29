@@ -6,16 +6,22 @@ Requires=docker.service
 
 [Service]
 ExecStart=/usr/bin/kubelet \
-  --api-servers={% for node in groups[master_group_name] %}https://{{ node }}{% if not loop.last %},{% endif %}{% endfor %} \
+  --api-servers={% for node in groups[master_group_name] %}https://{{ node }}:{{ kube_master_port }}{% if not loop.last %},{% endif %}{% endfor %} \
   --allow-privileged=true \
   --config={{ kube_manifest_dir }} \
   --hostname-override={{ ansible_hostname }} \
-  --cluster-dns={{ dns_server }} \
+  --cluster-dns={{ ansible_default_ipv4.address }} \
   --cluster-domain={{ dns_domain }} \
   --kubeconfig={{ kube_config_dir }}/node.kubeconfig \
   --tls-cert-file={{ kube_cert_dir }}/kubelet.crt \
   --tls-private-key-file={{ kube_cert_dir }}/kubelet.key \
-  --v=2
+  --v={{ kube_log_level }} {% if enable_cloud_provider %} \
+  --cloud-provider={{ cloud_provider }} \
+  --cloud-config={{ cloud_provider_config }} {% endif %} \
+  {% if calico_image is defined -%}
+  --network-plugin=cni \
+  --network-plugin-dir=/etc/cni/net.d {% endif %}
+
 Restart=always
 RestartSec=10
 

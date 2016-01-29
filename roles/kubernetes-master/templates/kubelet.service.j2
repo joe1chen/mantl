@@ -10,9 +10,15 @@ ExecStart=/usr/bin/kubelet \
   --register-node=false \
   --hostname-override={{ ansible_hostname }} \
   --allow-privileged=true \
-  --cluster-dns={{ dns_server }} \
+  --cluster-dns={{ ansible_default_ipv4.address }} \
   --cluster-domain={{ dns_domain }} \
-  --config={{ kube_manifest_dir }}
+  --config={{ kube_manifest_dir }} {% if enable_cloud_provider %}\
+  --cloud-provider={{ cloud_provider }} \
+  --cloud-config={{ cloud_provider_config }} {% endif %} \
+  {% if calico_image is defined -%}
+  --network-plugin=cni \
+  --network-plugin-dir=/etc/cni/net.d {% endif %}
+
 Restart=always
 RestartSec=10
 
