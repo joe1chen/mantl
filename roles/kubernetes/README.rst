@@ -5,11 +5,11 @@ Kubernetes
 
 **NOTES:** This is NOT kubernetes-mesos/Mantl framework, this is a standalone kubernetes cluster.
 
-**WARNING**: Do NOT install on top of existing Mantl cluster as it might brake it!
+**WARNING**: Do NOT install on top of existing Mantl cluster as it might break it!
 
 **REQUIREMENTS:**
 
-- Terraform binaries installed 
+- Terraform binaries installed
 - Run ``pip install -r requirements.txt``
 - Fresh formed cluster with terraform on your cloud of choice
 
