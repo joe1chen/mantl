@@ -29,7 +29,7 @@
     name: kube-ui-v3
     filename: "{{ kube_manifest_dir }}/kube-ui-rc.yaml"
     state: "{{ kube_ui_rc_def.changed | ternary('latest','present') }}"
-    server: "http://localhost:8085/api"
+    server: "http://localhost:8085/"
   when: enable_ui
   tags:
     - addons
@@ -43,7 +43,7 @@
     name: kube-ui
     filename: "{{ kube_manifest_dir }}/kube-ui-svc.yaml"
     state: "{{ kube_ui_svc_def.changed | ternary('latest','present') }}"
-    server: "http://localhost:8085/api"
+    server: "http://localhost:8085/"
   when: enable_ui
   tags:
     - addons

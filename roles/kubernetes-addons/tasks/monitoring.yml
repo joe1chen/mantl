@@ -62,7 +62,7 @@
     name: monitoring-influxdb-grafana-v2
     filename: "{{ kube_manifest_dir }}/influxdb-grafana-controller.yaml"
     state: "{{ influxdb_rc_def.changed | ternary('latest','present') }}"
-    server: "http://localhost:8085/api"
+    server: "http://localhost:8085/"
   when: enable_monitoring
   tags:
     - addons
@@ -76,7 +76,7 @@
     name: monitoring-influxdb
     filename: "{{ kube_manifest_dir }}/influxdb-service.yaml"
     state: "{{ influxdb_svc_def.changed | ternary('latest','present') }}"
-    server: "http://localhost:8085/api"
+    server: "http://localhost:8085/"
   when: enable_monitoring
   tags:
     - addons
@@ -90,7 +90,7 @@
     name: monitoring-grafana
     filename: "{{ kube_manifest_dir }}/grafana-service.yaml"
     state: "{{ grafana_svc_def.changed | ternary('latest','present') }}"
-    server: "http://localhost:8085/api"
+    server: "http://localhost:8085/"
   when: enable_monitoring
   tags:
     - addons
@@ -104,7 +104,7 @@
     name: heapster-v10
     filename: "{{ kube_manifest_dir }}/heapster-controller.yaml"
     state: "{{ heapster_rc_def.changed | ternary('latest','present') }}"
-    server: "http://localhost:8085/api"
+    server: "http://localhost:8085/"
   when: enable_monitoring
   tags:
     - addons
@@ -118,7 +118,7 @@
     name: heapster
     filename: "{{ kube_manifest_dir }}/heapster-service.yaml"
     state: "{{ heapster_svc_def.changed | ternary('latest','present') }}"
-    server: "http://localhost:8085/api"
+    server: "http://localhost:8085/"
   when: enable_monitoring
   tags:
     - addons

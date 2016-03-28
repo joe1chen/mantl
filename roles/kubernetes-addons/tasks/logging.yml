@@ -51,7 +51,7 @@
     name: elasticsearch-logging-v1
     filename: "{{ kube_manifest_dir }}/es-rc.yaml"
     state: "{{ es_rc_def.changed | ternary('latest','present') }}"
-    server: "http://localhost:8085/api"
+    server: "http://localhost:8085/"
   when: enable_logging
   tags:
     - addons
@@ -65,7 +65,7 @@
     name: elasticsearch-logging
     filename: "{{ kube_manifest_dir }}/es-svc.yaml"
     state: "{{ es_svc_def.changed | ternary('latest','present') }}"
-    server: "http://localhost:8085/api"
+    server: "http://localhost:8085/"
   when: enable_logging
   tags:
     - addons
@@ -79,7 +79,7 @@
     name: kibana-logging-v1
     filename: "{{ kube_manifest_dir }}/kibana-rc.yaml"
     state: "{{ kibana_rc_def.changed | ternary('latest','present') }}"
-    server: "http://localhost:8085/api"
+    server: "http://localhost:8085/"
   when: enable_logging
   tags:
     - addons
@@ -93,7 +93,7 @@
     name: kibana-logging
     filename: "{{ kube_manifest_dir }}/kibana-svc.yaml"
     state: "{{ kibana_svc_def.changed | ternary('latest','present') }}"
-    server: "http://localhost:8085/api"
+    server: "http://localhost:8085/"
   when: enable_logging
   tags:
     - addons

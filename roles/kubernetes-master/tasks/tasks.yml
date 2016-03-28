@@ -74,7 +74,7 @@
     resource: namespace
     name: kube-system
     filename: "{{ kube_manifest_dir }}/kube-system.yml"
-    server: "http://localhost:8085/api"
+    server: "http://localhost:8085/"
     state: present
   run_once: true
   tags:
