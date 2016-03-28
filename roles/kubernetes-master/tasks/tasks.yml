@@ -89,3 +89,11 @@
   tags:
     - addons
     - logging
+
+- name: configure kubectl
+  sudo: no
+  command: "/bin/kubectl {{ item }}"
+  with_items:
+    - config set-cluster mantl --server=http://127.0.0.1:8085
+    - config set-context mantl --cluster=mantl --namespace=kube-system
+    - config use-context mantl
