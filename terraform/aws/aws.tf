@@ -459,6 +459,10 @@ output "worker_ips" {
   value = "${join(\",\", aws_instance.mi-worker-nodes.*.public_ip)}"
 }
 
+output "kube_worker_ips" {
+  value = "${join(\",\", aws_instance.mi-kube-worker-nodes.*.public_ip)}"
+}
+
 output "edge_ips" {
   value = "${join(\",\", aws_instance.mi-edge-nodes.*.public_ip)}"
 }
