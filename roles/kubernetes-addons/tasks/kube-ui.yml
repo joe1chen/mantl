@@ -9,6 +9,7 @@
   tags:
     - addons
     - kube-ui
+    - kubernetes
 
 - name: Kube-UI | Write service file
   sudo: yes
@@ -20,6 +21,7 @@
   tags:
     - addons
     - kube-ui
+    - kubernetes
 
 - name: Kube-UI | Create or update replication controller
   sudo: yes
@@ -34,6 +36,7 @@
   tags:
     - addons
     - kube-ui
+    - kubernetes
 
 - name: Kube-UI | Create or update service
   sudo: yes
@@ -48,3 +51,4 @@
   tags:
     - addons
     - kube-ui
+    - kubernetes

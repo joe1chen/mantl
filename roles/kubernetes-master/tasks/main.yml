@@ -3,3 +3,4 @@
   when: "groups['role=kubeworker'] is defined"
   tags:
     - master
+    - kubernetes

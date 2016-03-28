@@ -9,6 +9,7 @@
   tags:
     - addons
     - skydns
+    - kubernetes
 
 - name: SkyDNS | Create or update replication controller
   sudo: yes
@@ -23,3 +24,4 @@
   tags:
     - addons
     - skydns
+    - kubernetes

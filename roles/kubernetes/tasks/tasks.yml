@@ -6,6 +6,7 @@
     when: "master in groups and groups[master_group_name] | length > 1"
   tags:
     - common
+    - kubernetes
 
 - name: create kubernetes config directories
   sudo: yes
@@ -31,3 +32,4 @@
 - include: secrets.yml
   tags:
     - secrets
+    - kubernetes

@@ -9,6 +9,7 @@
   tags:
     - addons
     - logging
+    - kubernetes
 
 - name: Logging | Kibana | Write service file
   sudo: yes
@@ -20,6 +21,7 @@
   tags:
     - addons
     - logging
+    - kubernetes
 
 - name: Logging | ES | Write pod file
   sudo: yes
@@ -31,6 +33,7 @@
   tags:
     - addons
     - logging
+    - kubernetes
 
 - name: Logging | ES | Write service file
   sudo: yes
@@ -42,6 +45,7 @@
   tags:
     - addons
     - logging
+    - kubernetes
 
 - name: Logging | ES | Create/update replication controller
   sudo: yes
@@ -56,6 +60,7 @@
   tags:
     - addons
     - logging
+    - kubernetes
 
 - name: Logging | ES | Create/update service
   sudo: yes
@@ -70,6 +75,7 @@
   tags:
     - addons
     - logging
+    - kubernetes
 
 - name: Logging | Kibana | Create/update replication controller
   sudo: yes
@@ -84,6 +90,7 @@
   tags:
     - addons
     - logging
+    - kubernetes
 
 - name: Logging | Kibana | Create/update service
   sudo: yes
@@ -98,3 +105,4 @@
   tags:
     - addons
     - logging
+    - kubernetes

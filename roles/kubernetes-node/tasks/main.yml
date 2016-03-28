@@ -2,6 +2,7 @@
 - include: secrets.yml
   tags:
     - secrets
+    - kubernetes
 
 - name: download kubernetes binaries
   sudo: yes
@@ -11,6 +12,7 @@
     - kubectl
   tags:
     - node
+    - kubernetes
 
 - name: generate kublet systemd unit
   sudo: yes
@@ -25,6 +27,7 @@
     - restart kubelet
   tags:
     - node
+    - kubernetes
 
 - name: generate kublet kubeconfig
   sudo: yes
@@ -39,6 +42,7 @@
     - restart kubelet
   tags:
     - node
+    - kubernetes
 
 - name: enable and start kubelet service
   sudo: yes
@@ -48,6 +52,7 @@
     state: started
   tags:
     - node
+    - kubernetes
 
 - name: generate kubernetes manifests
   sudo: yes
@@ -61,6 +66,7 @@
     - kube-proxy
   tags:
     - node
+    - kubernetes
 
 - name: addons | logging | create fluentd pod
   sudo: yes
@@ -71,3 +77,4 @@
   tags:
     - addons
     - logging
+    - kubernetes
