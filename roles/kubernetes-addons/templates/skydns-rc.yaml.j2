@@ -29,7 +29,7 @@ spec:
         args:
         # command = "/kube2sky"
         - -domain={{ dns_domain }}
-        - -etcd-server=http://{{ private_ipv4 }}:{{ etcd_client_port }}
+        - -etcd-server=http://etcd.service.consul:{{ etcd_client_port }}
         - -kubecfg_file=/etc/kubernetes/kubelet.kubeconfig
         volumeMounts:
           - mountPath: /etc/kubernetes/
