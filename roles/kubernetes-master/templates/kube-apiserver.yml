@@ -11,9 +11,8 @@ spec:
     command:
     - /hyperkube
     - apiserver
-    - --bind-address=0.0.0.0
-    - --etcd-servers={% for node in groups[etcd_group_name] %}{{ etcd_url_scheme }}://{{ node }}:{{ etcd_client_port }}{% if not loop.last %},{% endif %}{% endfor %}
-
+    - --bind-address={{ private_ipv4 }}
+    - --etcd-servers={{ etcd_url_scheme }}://etcd.service.consul:{{ etcd_client_port }}/
     - --allow-privileged=true
     - --service-cluster-ip-range={{ kube_service_addresses }}
     - --secure_port={{ kube_master_port }}
@@ -27,12 +26,12 @@ spec:
     - --basic-auth-file={{ kube_users_dir }}/known_users.csv
     - --v=3
     ports:
-    - containerPort: 6443
-      hostPort: 6443
+    - containerPort: {{ kube_master_port }}
+      hostPort: {{ kube_master_port }}
       protocol: TCP
       name: https
-    - containerPort: 8085
-      hostPort: 8085
+    - containerPort: {{ kube_insecure_port }}
+      hostPort: {{ kube_insecure_port }}
       protocol: TCP
       name: local
     volumeMounts:

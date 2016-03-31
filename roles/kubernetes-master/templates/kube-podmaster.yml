@@ -10,10 +10,9 @@ spec:
     image: gcr.io/google_containers/podmaster:1.1
     command:
     - /podmaster
-    - --etcd-servers={% for node in groups[etcd_group_name] %}{{ etcd_url_scheme }}://{{ node }}:{{ etcd_client_port }}{% if not loop.last %},{% endif %}{% endfor %}
-
+    - --etcd-servers={{ etcd_url_scheme }}://etcd.service.consul:{{ etcd_client_port }}
     - --key=scheduler
-    - --whoami={{ ansible_default_ipv4.address }}
+    - --whoami={{ private_ipv4 }}
     - --source-file=/src/manifests/kube-scheduler.yml
     - --dest-file=/dst/manifests/kube-scheduler.yml
     volumeMounts:
@@ -26,8 +25,7 @@ spec:
     image: gcr.io/google_containers/podmaster:1.1
     command:
     - /podmaster
-    - --etcd-servers={% for node in groups[etcd_group_name] %}{{ etcd_url_scheme }}://{{ node }}:{{ etcd_client_port }}{% if not loop.last %},{% endif %}{% endfor %}
-
+    - --etcd-servers={{ etcd_url_scheme }}://etcd.service.consul:{{ etcd_client_port }}
     - --key=controller
     - --whoami={{ ansible_default_ipv4.address }}
     - --source-file=/src/manifests/kube-controller-manager.yml

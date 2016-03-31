@@ -11,7 +11,7 @@ spec:
     command:
     - /hyperkube
     - controller-manager
-    - --master=http://127.0.0.1:8085
+    - --master=http://127.0.0.1:{{ kube_insecure_port }}
     - --service-account-private-key-file={{ kube_cert_dir }}/server.key
     - --root-ca-file={{ kube_cert_dir }}/ca.crt
     livenessProbe:

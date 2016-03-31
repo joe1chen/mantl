@@ -11,6 +11,6 @@ spec:
     command:
     - /hyperkube
     - proxy
-    - --master=http://127.0.0.1:8085
+    - --master=http://127.0.0.1:{{ kube_insecure_port }}
     securityContext:
       privileged: true
