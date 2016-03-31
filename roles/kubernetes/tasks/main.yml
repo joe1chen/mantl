@@ -10,7 +10,9 @@
 
 - name: create kubernetes config directories
   sudo: yes
-  file: path={{ item }} state=directory
+  file:
+    path: "{{ item }}"
+    state: directory
   with_items:
     - "{{ kube_config_dir }}"
     - "{{ kube_script_dir }}"
