@@ -1,5 +1,5 @@
 ---
-- name: Logging | Kibana | Write pod file
+- name: write kibana pod file
   sudo: yes
   copy:
     src: kibana-rc.yaml
@@ -11,7 +11,7 @@
     - logging
     - kubernetes
 
-- name: Logging | Kibana | Write service file
+- name: write kibana service file
   sudo: yes
   copy:
     src: kibana-svc.yaml
@@ -23,7 +23,7 @@
     - logging
     - kubernetes
 
-- name: Logging | ES | Write pod file
+- name: write elasticsearch pod file
   sudo: yes
   copy:
     src: es-rc.yaml
@@ -35,7 +35,7 @@
     - logging
     - kubernetes
 
-- name: Logging | ES | Write service file
+- name: write elasticsearch service file
   sudo: yes
   copy:
     src: es-svc.yaml
@@ -47,7 +47,7 @@
     - logging
     - kubernetes
 
-- name: Logging | ES | Create/update replication controller
+- name: create/update elasticsearch replication controller
   sudo: yes
   kube:
     namespace: kube-system
@@ -62,7 +62,7 @@
     - logging
     - kubernetes
 
-- name: Logging | ES | Create/update service
+- name: create/update elasticsearch service
   sudo: yes
   kube:
     namespace: kube-system
@@ -77,7 +77,7 @@
     - logging
     - kubernetes
 
-- name: Logging | Kibana | Create/update replication controller
+- name: create/update kibana replication controller
   sudo: yes
   kube:
     namespace: kube-system
@@ -92,7 +92,7 @@
     - logging
     - kubernetes
 
-- name: Logging | Kibana | Create/update service
+- name: create/update kibana service
   sudo: yes
   kube:
     namespace: kube-system

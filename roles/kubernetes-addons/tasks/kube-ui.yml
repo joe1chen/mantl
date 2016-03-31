@@ -1,5 +1,5 @@
 ---
-- name: Kube-UI | Write pod file
+- name: write pod file
   sudo: yes
   copy:
     src: kube-ui-rc.yaml
@@ -11,7 +11,7 @@
     - kube-ui
     - kubernetes
 
-- name: Kube-UI | Write service file
+- name: write service file
   sudo: yes
   copy:
     src: kube-ui-svc.yaml
@@ -23,7 +23,7 @@
     - kube-ui
     - kubernetes
 
-- name: Kube-UI | Create or update replication controller
+- name: create or update replication controller
   sudo: yes
   kube:
     namespace: kube-system
@@ -38,7 +38,7 @@
     - kube-ui
     - kubernetes
 
-- name: Kube-UI | Create or update service
+- name: create or update service
   sudo: yes
   kube:
     namespace: kube-system

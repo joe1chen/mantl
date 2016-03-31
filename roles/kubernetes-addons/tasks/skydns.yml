@@ -1,5 +1,5 @@
 ---
-- name: SkyDNS | Write pod file
+- name: write skydns pod file
   sudo: yes
   template:
     src: skydns-rc.yaml.j2
@@ -11,7 +11,7 @@
     - skydns
     - kubernetes
 
-- name: SkyDNS | Create or update replication controller
+- name: create/update skydns replication controller
   sudo: yes
   kube:
     namespace: kube-system
