@@ -6,7 +6,9 @@
 
 - name: download kubernetes binaries
   sudo: yes
-  get_url: url={{ kube_url }}/{{ item }} dest=/usr/bin mode=0753
+  get_url:
+    url: "{ kube_url }}/{{ item }}"
+    dest: /usr/bin mode=0753
   with_items:
     - kubelet
     - kubectl
@@ -14,7 +16,7 @@
     - node
     - kubernetes
 
-- name: generate kublet systemd unit
+- name: generate kubelet systemd unit
   sudo: yes
   template:
     src: kubelet.service.j2
@@ -29,7 +31,7 @@
     - node
     - kubernetes
 
-- name: generate kublet kubeconfig
+- name: generate kubelet kubeconfig
   sudo: yes
   template:
     src: node.kubeconfig.j2
@@ -68,7 +70,7 @@
     - node
     - kubernetes
 
-- name: addons | logging | create fluentd pod
+- name: create fluentd pod
   sudo: yes
   copy:
     src: fluentd-es.yaml
