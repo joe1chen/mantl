@@ -14,8 +14,8 @@
     path: "{{ item }}"
     state: directory
   with_items:
-    - "{{ kube_config_dir }}"
-    - "{{ kube_script_dir }}"
+    - "/etc/kubernetes"
+    - "/srv/kubernetes"
     - "{{ kube_manifest_dir }}"
     - "{{ kube_podmaster_dir }}"
     - "{{ kube_cert_dir }}"

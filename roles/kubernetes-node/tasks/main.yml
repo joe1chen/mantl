@@ -33,7 +33,7 @@
   sudo: yes
   template:
     src: node.kubeconfig.j2
-    dest: "{{ kube_config_dir }}/node.kubeconfig"
+    dest: "/etc/kubernetes/node.kubeconfig"
     owner: root
     group: root
     mode: 0644

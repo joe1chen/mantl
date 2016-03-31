@@ -14,14 +14,14 @@ spec:
     #- --master={% for node in groups[master_group_name] %}https://{{ node }}{% if not loop.last %},{% endif %}{% endfor %}
     
     - --master=https://{{ groups[master_group_name][0] }}:{{ kube_master_port }}
-    - --kubeconfig={{ kube_config_dir }}/node.kubeconfig
+    - --kubeconfig=/etc/kubernetes/node.kubeconfig
     securityContext:
       privileged: true
     volumeMounts:
-    - mountPath: {{ kube_config_dir }}
+    - mountPath: /etc/kubernetes
       name: etc-kubernetes
       readOnly: true
   volumes:
   - hostPath:
-      path: {{ kube_config_dir }}
+      path: /etc/kubernetes
     name: etc-kubernetes

@@ -35,10 +35,10 @@ spec:
       protocol: TCP
       name: local
     volumeMounts:
-    - mountPath: {{ kube_config_dir }}
+    - mountPath: /etc/kubernetes
       name: etc-kubernetes
       readOnly: true
   volumes:
   - hostPath:
-      path: {{ kube_config_dir }}
+      path: /etc/kubernetes
     name: etc-kubernetes
