@@ -1,0 +1,15 @@
+{
+    "services": [
+        {
+            "name": "kubernetes-api",
+            "port": {{ kube_insecure_port }},
+            "checks": [{
+                "id": "api",
+                "name": "API on port {{ kube_insecure_port }}",
+                "http": "http://localhost:{{ kube_insecure_port }}/healthz",
+                "interval": "10s",
+                "timeout": "1s"
+            }]
+        }
+    ]
+}
