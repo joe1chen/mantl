@@ -11,9 +11,7 @@ spec:
     command:
     - /hyperkube
     - proxy
-    #- --master={% for node in groups[master_group_name] %}https://{{ node }}{% if not loop.last %},{% endif %}{% endfor %}
-    
-    - --master=https://{{ groups[master_group_name][0] }}:{{ kube_master_port }}
+    - --master=https://kubernetes-api.service.consul:{{ kube_master_port }}
     - --kubeconfig=/etc/kubernetes/node.kubeconfig
     securityContext:
       privileged: true
