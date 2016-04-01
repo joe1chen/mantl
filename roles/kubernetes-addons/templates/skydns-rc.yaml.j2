@@ -27,10 +27,9 @@ spec:
             cpu: 100m
             memory: 50Mi
         args:
-        # command = "/kube2sky"
         - -domain={{ dns_domain }}
-        - -etcd-server=http://etcd.service.consul:{{ etcd_client_port }}
-        - -kubecfg_file=/etc/kubernetes/kubelet.kubeconfig
+        - -etcd-server=http://{{ private_ipv4 }}:{{ etcd_client_port }}
+        - -kubecfg_file=/etc/kubernetes/node.kubeconfig
         volumeMounts:
           - mountPath: /etc/kubernetes/
             name: kube-etc
@@ -46,7 +45,7 @@ spec:
         ports:
         - containerPort: 8080
           protocol: TCP
-      dnsPolicy: Default  # Don't use cluster DNS.
+      dnsPolicy: ClusterFirst
       volumes:
       - name: kube-etc
         hostPath:
