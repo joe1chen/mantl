@@ -23,7 +23,7 @@ kube_users_dir: "/etc/kubernetes/users"
 kube_manifest_dir: "/etc/kubernetes/manifests"
 
 # This is where manifests for podmaster will be stored
-kube_podmaster_dir: "/srv/kubernets/manifests"
+kube_podmaster_dir: "/srv/kubernetes/manifests"
 
 dns_domain: "{{ cluster_name }}"
 

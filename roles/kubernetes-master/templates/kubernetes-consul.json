@@ -1,8 +1,9 @@
 {
     "services": [
         {
-            "name": "kubernetes-api",
+            "name": "kubernetes",
             "port": {{ kube_insecure_port }},
+            "tags": ["insecure"],
             "checks": [{
                 "id": "api",
                 "name": "API on port {{ kube_insecure_port }}",
@@ -10,6 +11,11 @@
                 "interval": "10s",
                 "timeout": "1s"
             }]
+        },
+        {
+            "name": "kubernetes",
+            "port": {{ kube_master_port }},
+            "tags": ["secure"]
         }
     ]
 }

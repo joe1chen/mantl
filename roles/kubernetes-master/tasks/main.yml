@@ -8,7 +8,8 @@
   sudo: yes
   get_url:
     url: "{{ kube_url }}/{{ item }}"
-    dest: /usr/bin mode=0753
+    dest: /usr/bin
+    mode: 0753
   with_items:
     - kubelet
     - kubectl
@@ -74,6 +75,10 @@
     - master
     - kubernetes
 
+- meta: flush_handlers
+  tags:
+    - kubernetes
+
 - name: generate kubernetes podmaster manifests
   sudo: yes
   template:
@@ -90,22 +95,25 @@
     - kubernetes
 
 - name: wait for apiserver to come up
-  wait_for: port=8085
+  wait_for:
+    port: 8085
+  tags:
+    - kubernetes
 
-- name: Create kube-system namespace
+- name: create kube-system namespace
   sudo: yes
   kube:
     resource: namespace
     name: kube-system
     filename: "{{ kube_manifest_dir }}/kube-system.yml"
-    server: "http://localhost:8085/"
+    server: "http://127.0.0.1:{{ kube_insecure_port }}/"
     state: present
   run_once: true
   tags:
     - master
     - kubernetes
 
-- name: addons | logging | create fluentd pod
+- name: create fluentd pod
   sudo: yes
   copy:
     src: fluentd-es.yaml

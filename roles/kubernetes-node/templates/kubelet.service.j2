@@ -6,7 +6,7 @@ Requires=docker.service
 
 [Service]
 ExecStart=/usr/bin/kubelet \
-  --api-servers=https://kubernetes-api.service.consul:{{ kube_master_port }} \
+  --api-servers=https://kubernetes.service.consul:{{ kube_master_port }} \
   --allow-privileged=true \
   --config={{ kube_manifest_dir }} \
   --hostname-override={{ ansible_hostname }} \

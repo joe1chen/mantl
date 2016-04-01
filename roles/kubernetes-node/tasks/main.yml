@@ -7,8 +7,9 @@
 - name: download kubernetes binaries
   sudo: yes
   get_url:
-    url: "{ kube_url }}/{{ item }}"
-    dest: /usr/bin mode=0753
+    url: "{{ kube_url }}/{{ item }}"
+    dest: /usr/bin
+    mode: 0753
   with_items:
     - kubelet
     - kubectl

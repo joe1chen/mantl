@@ -11,7 +11,7 @@ spec:
     command:
     - /hyperkube
     - proxy
-    - --master=https://kubernetes-api.service.consul:{{ kube_master_port }}
+    - --master=https://kubernetes.service.consul:{{ kube_master_port }}
     - --kubeconfig=/etc/kubernetes/node.kubeconfig
     securityContext:
       privileged: true
