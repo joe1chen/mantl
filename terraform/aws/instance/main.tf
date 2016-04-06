@@ -50,6 +50,10 @@ resource "aws_instance" "instance" {
   }
 }
 
+resource "aws_eip" "eip" {
+  instance = "${aws_instance.instance.id}"
+  vpc = true
+}
 
 resource "aws_volume_attachment" "instance-lvm-attachment" {
   count = "${var.count}"
@@ -70,5 +74,5 @@ output "ec2_ids" {
 }
 
 output "ec2_ips" {
-  value = "${join(\",\", aws_instance.instance.*.public_ip)}"
+  value = "${join(\",\", aws_eip.eip.*.public_ip)}"
 }
