@@ -221,7 +221,7 @@ class Ec2Inventory(object):
 
         # Regions
         self.regions = []
-        configRegions = config.get('ec2', 'regions')
+        configRegions = os.getenv('AWS_DEFAULT_REGION', config.get('ec2', 'regions'))
         configRegions_exclude = config.get('ec2', 'regions_exclude')
         if (configRegions == 'all'):
             if self.eucalyptus_host:
