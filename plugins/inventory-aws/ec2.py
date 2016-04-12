@@ -702,12 +702,16 @@ class Ec2Inventory(object):
                     self.push_group(self.inventory, region, instance.placement)
                 self.push_group(self.inventory, 'zones', instance.placement)
 
+            self.push_group(self.inventory, 'aws_az=' + instance.placement, hostname, 'hosts')
+
         # Inventory: Group by Amazon Machine Image (AMI) ID
         if self.group_by_ami_id:
             ami_id = self.to_safe(instance.image_id)
             self.push(self.inventory, ami_id, hostname)
             if self.nested_groups:
                 self.push_group(self.inventory, 'images', ami_id)
+
+            self.push_group(self.inventory, 'aws_ami=' + instance.image_id, hostname, 'hosts')
 
         # Inventory: Group by instance type
         if self.group_by_instance_type:
@@ -722,6 +726,8 @@ class Ec2Inventory(object):
             self.push(self.inventory, key_name, hostname)
             if self.nested_groups:
                 self.push_group(self.inventory, 'keys', key_name)
+
+            self.push_group(self.inventory, 'aws_key_name=' + instance.key_name, hostname, 'hosts')
 
         # Inventory: Group by VPC
         if self.group_by_vpc_id and instance.vpc_id:
@@ -761,6 +767,10 @@ class Ec2Inventory(object):
                         if v:
                             self.push_group(self.inventory, self.to_safe("tag_" + k), key)
 
+                    if v:
+                        self.push_group(self.inventory, k + '=' + v, hostname, 'hosts')
+                        self.push_group(self.inventory, 'aws_tag_' + k + '=' + v, hostname, 'hosts')
+
         # Inventory: Group by Route53 domain names if enabled
         if self.route53_enabled and self.group_by_route53_names:
             route53_names = self.get_instance_route53_names(instance)
@@ -780,12 +790,44 @@ class Ec2Inventory(object):
 
         self.inventory["_meta"]["hostvars"][hostname] = self.get_host_info_dict_from_instance(instance)
         self.inventory["_meta"]["hostvars"][hostname]['ansible_ssh_host'] = dest
+        self.inventory["_meta"]["hostvars"][hostname]['ansible_ssh_port'] = 22
+        self.inventory["_meta"]["hostvars"][hostname]['ansible_python_interpreter'] = 'python'
 
         # Set provider to 'aws'
         self.inventory["_meta"]["hostvars"][hostname]['provider'] = 'aws'
 
+        self.inventory["_meta"]["hostvars"][hostname]['id'] = self.inventory["_meta"]["hostvars"][hostname]['ec2_id']
+        self.inventory["_meta"]["hostvars"][hostname]['ami'] = self.inventory["_meta"]["hostvars"][hostname]['ec2_image_id']
+        self.inventory["_meta"]["hostvars"][hostname]['availability_zone'] = self.inventory["_meta"]["hostvars"][hostname]['ec2_placement']
+
+        self.inventory["_meta"]["hostvars"][hostname]['private'] = {}
+        self.inventory["_meta"]["hostvars"][hostname]['private']['ip'] = self.inventory["_meta"]["hostvars"][hostname]['ec2_private_ip_address']
+        self.inventory["_meta"]["hostvars"][hostname]['private']['dns'] = self.inventory["_meta"]["hostvars"][hostname]['ec2_private_dns_name']
+        self.inventory["_meta"]["hostvars"][hostname]['private_ipv4'] = self.inventory["_meta"]["hostvars"][hostname]['ec2_private_ip_address']
+
+        self.inventory["_meta"]["hostvars"][hostname]['public'] = {}
+        self.inventory["_meta"]["hostvars"][hostname]['public']['ip'] = self.inventory["_meta"]["hostvars"][hostname]['ec2_ip_address']
+        self.inventory["_meta"]["hostvars"][hostname]['public']['dns'] = self.inventory["_meta"]["hostvars"][hostname]['ec2_public_dns_name']
+        self.inventory["_meta"]["hostvars"][hostname]['public_ipv4'] = self.inventory["_meta"]["hostvars"][hostname]['ec2_ip_address']
+
+        self.inventory["_meta"]["hostvars"][hostname]['subnet'] = {}
+        self.inventory["_meta"]["hostvars"][hostname]['subnet']['id'] = self.inventory["_meta"]["hostvars"][hostname]['ec2_subnet_id']
+
+        self.push_group(self.inventory, 'aws_subnet_id' + '=' + self.inventory["_meta"]["hostvars"][hostname]['ec2_subnet_id'], hostname, 'hosts')
+
+        self.inventory["_meta"]["hostvars"][hostname]['ebs_optimized'] = self.inventory["_meta"]["hostvars"][hostname]['ec2_ebs_optimized']
+
+        self.inventory["_meta"]["hostvars"][hostname]['key_name'] = self.inventory["_meta"]["hostvars"][hostname]['ec2_key_name']
+
+        self.inventory["_meta"]["hostvars"][hostname]['vpc_security_group_ids'] = map(lambda x: x.strip(), self.inventory["_meta"]["hostvars"][hostname]['ec2_security_group_ids'].split(','))
+
+        for sg_id in self.inventory["_meta"]["hostvars"][hostname]['vpc_security_group_ids']:
+            self.push_group(self.inventory, 'aws_vpc_security_group' + '=' + sg_id, hostname, 'hosts')
+
         # attrs specific to Mantl
         self.inventory["_meta"]["hostvars"][hostname]['role'] = 'none'
+
+        self.inventory["_meta"]["hostvars"][hostname]['tags'] = {}
 
         for k, v in instance.tags.items():
             if self.expand_csv_tags and v and ',' in v:
@@ -795,6 +837,8 @@ class Ec2Inventory(object):
 
             for v in values:
                 if v:
+                    self.inventory["_meta"]["hostvars"][hostname]['tags'][k] = v
+
                     if k == 'sshUser':
                         self.inventory["_meta"]["hostvars"][hostname]['ansible_ssh_user'] = v
                     if k == 'dc':
@@ -857,6 +901,8 @@ class Ec2Inventory(object):
                 if self.group_by_region:
                     self.push_group(self.inventory, region, instance.availability_zone)
                 self.push_group(self.inventory, 'zones', instance.availability_zone)
+
+            self.push_group(self.inventory, 'aws_az=' + instance.availability_zone, hostname, 'hosts')
 
         # Inventory: Group by instance type
         if self.group_by_instance_type:
@@ -951,6 +997,8 @@ class Ec2Inventory(object):
                     self.push_group(self.inventory, region, cluster['PreferredAvailabilityZone'])
                 self.push_group(self.inventory, 'zones', cluster['PreferredAvailabilityZone'])
 
+            self.push_group(self.inventory, 'aws_az=' + cluster['PreferredAvailabilityZone'], hostname, 'hosts')
+
         # Inventory: Group by node type
         if self.group_by_instance_type and not is_redis:
             type_name = self.to_safe('type_' + cluster['CacheNodeType'])
@@ -1042,6 +1090,8 @@ class Ec2Inventory(object):
                 if self.group_by_region:
                     self.push_group(self.inventory, region, cluster['PreferredAvailabilityZone'])
                 self.push_group(self.inventory, 'zones', cluster['PreferredAvailabilityZone'])
+
+            self.push_group(self.inventory, 'aws_az=' + cluster['PreferredAvailabilityZone'], hostname, 'hosts')
 
         # Inventory: Group by node type
         if self.group_by_instance_type:
@@ -1350,12 +1400,12 @@ class Ec2Inventory(object):
         else:
             group_info.append(element)
 
-    def push_group(self, my_dict, key, element):
+    def push_group(self, my_dict, key, element, parent_default = 'children'):
         ''' Push a group as a child of another group. '''
         parent_group = my_dict.setdefault(key, {})
         if not isinstance(parent_group, dict):
             parent_group = my_dict[key] = {'hosts': parent_group}
-        child_groups = parent_group.setdefault('children', [])
+        child_groups = parent_group.setdefault(parent_default, [])
         if element not in child_groups:
             child_groups.append(element)
 
