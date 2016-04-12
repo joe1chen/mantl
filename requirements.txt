@@ -5,3 +5,5 @@ pytest==2.7.1
 PyYAML==3.11
 Sphinx==1.2.3
 ansible-lint>=2.2.0
+boto==2.39.0
+six==1.10.0
