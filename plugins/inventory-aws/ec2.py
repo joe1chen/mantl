@@ -781,6 +781,30 @@ class Ec2Inventory(object):
         self.inventory["_meta"]["hostvars"][hostname] = self.get_host_info_dict_from_instance(instance)
         self.inventory["_meta"]["hostvars"][hostname]['ansible_ssh_host'] = dest
 
+        # Set provider to 'aws'
+        self.inventory["_meta"]["hostvars"][hostname]['provider'] = 'aws'
+
+        # attrs specific to Mantl
+        self.inventory["_meta"]["hostvars"][hostname]['role'] = 'none'
+
+        for k, v in instance.tags.items():
+            if self.expand_csv_tags and v and ',' in v:
+                values = map(lambda x: x.strip(), v.split(','))
+            else:
+                values = [v]
+
+            for v in values:
+                if v:
+                    if k == 'sshUser':
+                        self.inventory["_meta"]["hostvars"][hostname]['ansible_ssh_user'] = v
+                    if k == 'dc':
+                        self.inventory["_meta"]["hostvars"][hostname]['consul_dc'] = v
+                    if k == 'role':
+                        self.inventory["_meta"]["hostvars"][hostname]['role'] = v
+                        if v == 'control':
+                            self.inventory["_meta"]["hostvars"][hostname]['consul_is_server'] = True
+                        else:
+                            self.inventory["_meta"]["hostvars"][hostname]['consul_is_server'] = False
 
     def add_rds_instance(self, instance, region):
         ''' Adds an RDS instance to the inventory and index, as long as it is
