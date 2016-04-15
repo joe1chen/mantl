@@ -51,6 +51,7 @@ if __name__ == "__main__":
         (["terraform", "get"], 1),
         (["terraform", "plan"], 1),
         (["terraform", "apply"], 1),
+        (["sleep", "10"], 1),
         (ap + ["playbooks/wait-for-hosts.yml"], 3),
         (ap + ["-e", "serial=0", "playbooks/upgrade-packages.yml"], 1),
         (ap + ["sample.yml"], 1),
