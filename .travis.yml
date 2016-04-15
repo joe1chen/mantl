@@ -1,7 +1,8 @@
 language: python
 env:
   matrix:
-     - TERRAFORM_FILE=testing/aws.tf ANSIBLE_PLAYBOOK=sample.yml
+     - TERRAFORM_FILE=testing/aws-autoscaling.tf ANSIBLE_PLAYBOOK=sample.yml ANSIBLE_HOSTS=plugins/inventory-aws/ec2.py
+     # TERRAFORM_FILE=testing/aws.tf ANSIBLE_PLAYBOOK=sample.yml
      # TERRAFORM_FILE=testing/do.tf  ANSIBLE_PLAYBOOK=sample.yml
      # TERRAFORM_FILE=testing/gce.tf ANSIBLE_PLAYBOOK=sample.yml
      # TERRAFORM_FILE=testing/aws.tf ANSIBLE_PLAYBOOK=kubernetes.yml
