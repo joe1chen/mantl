@@ -300,3 +300,70 @@ In your ``aws.tf``, you will want to uncomment the aws-elb module:
     subnets = "${terraform_remote_state.vpc.output.subnet_ids}"
     security_groups = "${module.control-nodes.ui_security_group},${terraform_remote_state.vpc.output.default_security_group}"
   }
+
+Using Auto-Scaling Groups (ASG) for Nodes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Optionally, instead of Terraform creating separate aws instances for
+nodes, you can use the ``aws-autoscaling.sample.tf`` to have Terraform
+create Launch Configurations and Auto-Scaling Groups for your cluster.
+
+.. code-block:: json
+
+  cd mantl
+  cp terraform/aws-autoscaling.sample.tf aws.tf
+
+Notables Differences When Using Mantl with ASG
+
+1. Nodes are no longer directly created by Terraform. Since nodes are created by the
+auto-scaling group, this has several implications:
+
+* We cannot use Terraform to tag nodes sequentially with Name=mantl-control-1, Name=mantl-control-2, etc. Instead all control nodes are tagged Name=mantl-control.
+
+* We cannot use the Terraform DNS scripts to create individual DNS entries for each node, since Terraform has no knowledge of the nodes.
+
+2. Ansible cannot use the Terraform Inventory script in ``plugins/inventory/terraform.py``
+since Terraform no longer has knowledge of the nodes.  Instead we need to
+configure Ansible to use the AWS dynamic inventory script in ``plugins/inventory-aws/ec2.py``.
+
+.. code-block:: json
+
+  export ANSIBLE_HOSTS=plugins/inventory-aws/ec2.py
+
+This script generates an inventory that Ansible can understand by making API request to
+AWS EC2 using the Boto library.  This script was originally provided by Ansible
+(https://raw.github.com/ansible/ansible/devel/contrib/inventory/ec2.py), but it has been
+customized to make the output looks as close to the Terraform inventory as possible, so that
+existing playbooks can use it without any modifications.
+
+The AWS dynamic inventory script assumes Ansible is being executed where the environment
+variables needed for Boto have already been set:
+
+.. code-block:: json
+
+  export AWS_ACCESS_KEY_ID='AK123'
+  export AWS_SECRET_ACCESS_KEY='abc123'
+
+This script also assumes there is an ``ec2.ini`` file alongside it (``plugins/inventory-aws/ec2.ini``).
+You can edit this file to customize the scripts behavior, but it should work out-of-the-box
+for Mantl.
+
+Also, you will need to define the AWS_DEFAULT_REGION environment variable to point to where your
+Mantl cluster is running:
+
+.. code-block:: json
+
+  export AWS_DEFAULT_REGION=us-east-1
+
+The script also assumes you have only one Mantl cluster on this region. You may need to further
+customize ``ec2.py`` or ``ec2.ini`` if you have more than one cluster on the region.
+
+Future Enhancements
+
+Auto-scaling groups are set to a fixed cluster size.  You have the ability to manually scale up
+or down an existing cluster by using the EC2 console or by editing your Terraform configuraton file
+and re-running ``terraform apply``.  You will still need to run the Ansible scripts to provision
+the new nodes.
+
+In the future, we could use Ansible Tower or something similar to auto-provision new nodes
+and have them auto-join the cluster once they have launched.

@@ -17,6 +17,11 @@ different path to ec2.ini, define the EC2_INI_PATH environment variable:
 
     export EC2_INI_PATH=/path/to/my_ec2.ini
 
+To limit the number of regions that Boto checks, set the AWS_DEFAULT_REGION
+environment variable:
+
+    export AWS_DEFAULT_REGION=us-east-1
+
 If you're using eucalyptus you need to set the above variables and
 you need to define:
 
